@@ -11,6 +11,8 @@ import time
 
 class WindowsBalloonTip:
     def __init__(self, title, msg):
+        self.title = title
+        self.msg = msg
         message_map = {
             win32con.WM_DESTROY: self.OnDestroy,
         }
@@ -38,10 +40,11 @@ class WindowsBalloonTip:
         Shell_NotifyIcon(NIM_ADD, nid)
         Shell_NotifyIcon(NIM_MODIFY, \
                          (self.hwnd, 0, NIF_INFO, win32con.WM_USER+20, \
-                          hicon, "Balloon  tooltip",title,200,msg))
+                          hicon, "Balloon  tooltip",self.title,200,self.msg))
         # self.show_balloon(title, msg)
-        time.sleep(10)
-        DestroyWindow(self.hwnd)
+        #time.sleep(10)
+        #DestroyWindow(self.hwnd)
+        
     def OnDestroy(self, hwnd, msg, wparam, lparam):
         nid = (self.hwnd, 0)
         Shell_NotifyIcon(NIM_DELETE, nid)

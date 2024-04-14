@@ -3,12 +3,9 @@
 # Thank you to hitesh_kumar_kushwaha on Geeks for Geeks for the automated startup code
 
 # module to edit the windows registry 
-import winreg 
-import os
 
-import ctypes, os
-from sys import exit
 
+import ctypes
 import getpass
 import os
 

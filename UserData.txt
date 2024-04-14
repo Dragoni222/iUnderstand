@@ -1,0 +1,39 @@
+Startup: False
+MuteStartup: True
+Notifications: False
+MuteNotifications: True
+NotificationTime: 20:00
+NotificationTitle: Reminder to write reflection
+NotificationMessage: hiiii this is your daily reminder to write a reflection of the day on iUnderstand :)
+
+
+
+Begin
+1
+2024-04-13 21:35:21.452973
+1000
+asdjkl
+
+End
+
+Begin
+2
+2024-04-13 21:37:33.084123
+100.0
+jkasldjk
+
+End
+
+Begin
+3
+2024-04-13 21:37:47.745656
+1000.0
+
+End
+
+Begin
+4
+2024-04-13 21:38:06.289241
+1000.0
+
+End

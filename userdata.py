@@ -1,10 +1,12 @@
 ﻿from datetime import datetime
 from os.path import exists
 from JournalEntry import JournalEntry
+import asyncio
 
 
 class userdata:
     def __init__(self):
+        self.num_of_entries = len(self.GetJournals())
         if not exists("UserData.txt"):
             data = open("UserData.txt", "w")
             data.write(
@@ -16,9 +18,12 @@ class userdata:
     def SetSetting(self, setting, value):
         data = open("UserData.txt", "r")
         prevData = data.read()
+
         prevData = prevData.split("\n")
         data.close()
-        data = open("UserData.txt", "r").readlines()
+        dataFile = open("UserData.txt", "r")
+        data = dataFile.readlines()
+        dataFile.close()
         line = 0
 
         found = False
@@ -30,23 +35,24 @@ class userdata:
                 line += 1
 
         prevData.pop(line)
-        prevData2 = prevData[:line - 1]
-        prevData = prevData[line-1:] if line > 0 else []
+        prevData2 = prevData[(line):]
+        prevData = prevData[:(line)]
+
         prevData2 = "\n".join(prevData2)
+        prevData2 += "\n"
         prevData = "\n".join(prevData)
+        if line != 0:
+            prevData += "\n"
         data = open("UserData.txt", "w")
-        
-        print(prevData)
-        input()
-        print(prevData2)
-        input()
-        
+
         data.writelines(prevData)
-        data.write( setting + ": " + str(value) + "\n")
+        data.write(setting + ": " + str(value) + "\n")
         data.writelines(prevData2)
+        data.close()
 
     def GetSetting(self, setting, type):
-        data = open("UserData.txt", "r").readlines()
+        dataFile = open("UserData.txt", "r")
+        data = dataFile.readlines()
         found = False
         line = 0
         while not found:
@@ -56,20 +62,24 @@ class userdata:
 
             else:
                 line += 1
+        dataFile.close()
 
-    def AddJournal(self, journal):
+    def AddJournal(self, date, rating, notes):
+        self.num_of_entries += 1
+        journal = JournalEntry(date, rating, notes, self.num_of_entries)
         previousDataFile = open("UserData.txt", "r")
         previousData = previousDataFile.read()
         previousDataFile.close()
         data = open("UserData.txt", "w")
         data.write(previousData)
         data.write("\nBegin\n")
-        data.write(str(journal.date) + "\n" + str(journal.rating) + "\n" + journal.notes)
+        data.write(str(journal.id) + "\n" + str(journal.date) + "\n" + str(journal.rating) + "\n" + journal.notes)
         data.write("\nEnd\n")
         data.close()
 
     def GetJournals(self):
         data = open("UserData.txt", "r")
+        jid = False
         date = False
         rating = False
         body = False
@@ -79,7 +89,11 @@ class userdata:
         for line in data:
 
             if line.startswith("Begin"):
+                jid = True
+            elif jid:
+                journal.append(int(line.strip()))
                 date = True
+                jid = False
             elif date:
                 dateData = line.strip().split("-")
                 timesplit = dateData[2].split(" ")
@@ -99,10 +113,22 @@ class userdata:
                 body = True
             elif body:
                 if line.startswith("End"):
-                    journal = JournalEntry(journal[0], journal[1], journal[2])
+                    journal = JournalEntry(journal[1], journal[2], journal[3], journal[0])
                     journals.append(journal)
                     journal = []
                     body = False
                 else:
-                    journal[2] += line
+                    journal[3] += line
+
+        data.close()
         return journals
+
+    #def GetJournal(self, id):
+
+    def AverageRating(self):
+        journals = self.GetJournals()
+        total = 0
+        for journal in journals:
+            total += journal.rating
+
+        return total / len(journals)
