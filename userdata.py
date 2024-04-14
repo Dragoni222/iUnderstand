@@ -6,14 +6,17 @@ import asyncio
 
 class userdata:
     def __init__(self):
-        self.num_of_entries = len(self.GetJournals())
+
         if not exists("UserData.txt"):
+            self.num_of_entries = 0
             data = open("UserData.txt", "w")
             data.write(
                 "Startup: False\nMuteStartup: False\nNotifications: False\nMuteNotifications: False\nNotificationTime: "
                 "20:00\nNotificationTitle: Reminder to write reflection\nNotificationMessage:"
                 " hiiii this is your daily reminder to write a reflection of the day on iUnderstand :)")
             data.close()
+        else:
+            self.num_of_entries = len(self.GetJournals())
 
     def SetSetting(self, setting, value):
         data = open("UserData.txt", "r")
