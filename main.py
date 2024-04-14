@@ -2,10 +2,10 @@
 import random
 from datetime import datetime
 import balloontip
+import typeout
 import windowsstartup
 import schedule
 import time
-from JournalEntry import JournalEntry
 from userdata import userdata
 
 
@@ -81,7 +81,7 @@ async def main():
                     baddays = open("baddays", "r")
                     lines = baddays.readlines()
                     baddays.close()
-                    print(random.choice(lines))
+                    typeout.typeout(random.choice(lines))
                     input("Enter to continue...")
 
             elif rating > (data.AverageRating() * 6) / 5:
@@ -90,7 +90,7 @@ async def main():
                     gooddays = open("gooddays", "r")
                     lines = gooddays.readlines()
                     gooddays.close()
-                    print(random.choice(lines))
+                    typeout.typeout(random.choice(lines))
                     input("Enter to continue...")
             else:
                 input("Enter to continue...")
